@@ -33,10 +33,12 @@ export default function Register() {
           alignItems: "center",
           justifyItems: "center"
         }}
+        className="mb-2"
         onSubmit={handleSubmit}
       >
         <input
           type="text"
+          className="border p-1 rounded"
           placeholder="Username"
           name="username"
           onChange={handleChange}
@@ -44,6 +46,7 @@ export default function Register() {
         />
         <input
           type="email"
+          className="border p-1 rounded"
           placeholder="Email address"
           name="email"
           onChange={handleChange}
@@ -51,12 +54,15 @@ export default function Register() {
         />
         <input
           type="password"
+          className="border p-1 rounded"
           placeholder="Password"
           name="password"
           onChange={handleChange}
           value={form.password}
         />
-        <button type="submit">Submit</button>
+        <button type="submit" className="bg-orange rounded m-1 p-1">
+          Submit
+        </button>
       </form>
 
       {user && JSON.stringify(user, null, 2)}

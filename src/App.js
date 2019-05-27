@@ -63,10 +63,12 @@ const App = () => {
       <h1>React Hooks intro</h1>
       {/* useState */}
 
-      <h3>Counter</h3>
-      <button onClick={incrementCount}>I was clicked {count} times</button>
+      <h3 className="m-2">Counter</h3>
+      <button onClick={incrementCount} className="bg-orange rounded m-1 p-1">
+        I was clicked {count} times
+      </button>
 
-      <h3>Toggle Light</h3>
+      <h3 className="m-2">Toggle Light</h3>
       <div style={{ display: "flex" }}>
         <img
           src={isOn ? "https://icon.now.sh/highlight/fd0" : "https://icon.now.sh/highlight/aaa"}
@@ -90,15 +92,15 @@ const App = () => {
 
       {/* useEffect */}
 
-      <h3>Mouse Position</h3>
+      <h3 className="m-2">Mouse Position</h3>
       {JSON.stringify(mousePosition, null, 2)}
 
-      <h3>Network status</h3>
+      <h3 className="m-2">Network status</h3>
       <p>
         You are <strong>{status ? "online" : "offline"}</strong>
       </p>
 
-      <h3>Geolocation</h3>
+      <h3 className="m-2">Geolocation</h3>
       <p>Latitude is {latitude ? latitude : "No access"}</p>
       <p>Longitude is {longitude ? longitude : "No access"}</p>
       <p>Your speed is {speed ? speed : "0"}</p>

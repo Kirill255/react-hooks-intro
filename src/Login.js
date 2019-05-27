@@ -28,21 +28,26 @@ export default function Login() {
           alignItems: "center",
           justifyItems: "center"
         }}
+        className="mb-2"
         onSubmit={handleSubmit}
       >
         <input
           type="text"
+          className="border p-1 rounded"
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
         />
         <input
           type="password"
+          className="border p-1 rounded"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        <button type="submit">Submit</button>
+        <button type="submit" className="bg-orange rounded m-1 p-1">
+          Submit
+        </button>
 
         {user && JSON.stringify(user, null, 2)}
       </form>
