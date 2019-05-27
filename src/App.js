@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Login from "./Login";
 
 const initialLocationState = {
   latitude: null,
@@ -99,6 +100,8 @@ const App = () => {
       <p>Latitude is {latitude ? latitude : "No access"}</p>
       <p>Longitude is {longitude ? longitude : "No access"}</p>
       <p>Your speed is {speed ? speed : "0"}</p>
+
+      <Login />
     </>
   );
 };
