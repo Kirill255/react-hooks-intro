@@ -21,6 +21,8 @@ export default function TodoForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!text) return;
+
     if (currentTodo.text) {
       dispatch({ type: "UPDATE_TODO", payload: { ...currentTodo, text } });
     } else {

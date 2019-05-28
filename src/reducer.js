@@ -24,7 +24,8 @@ export default function reducer(state, action) {
 
     case "REMOVE_TODO":
       const filteredTodos = state.todos.filter((t) => t.id !== action.payload.id);
-      return { ...state, todos: filteredTodos };
+      const isRemovedTodo = state.currentTodo.id === action.payload.id ? {} : state.currentTodo;
+      return { ...state, todos: filteredTodos, currentTodo: isRemovedTodo }; // fix bug, когда нажали редактировать, а потом удалить
     default:
       return state;
   }
