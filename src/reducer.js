@@ -10,6 +10,18 @@ export default function reducer(state, action) {
       );
       return { ...state, todos: toggledTodos };
 
+    case "SET_CURRENT_TODO":
+      return { ...state, currentTodo: action.payload };
+
+    case "UPDATE_TODO":
+      const updatedTodoIndex = state.todos.findIndex((t) => t.id === action.payload.id);
+      const updatedTodos = [
+        ...state.todos.slice(0, updatedTodoIndex),
+        action.payload,
+        ...state.todos.slice(updatedTodoIndex + 1)
+      ];
+      return { ...state, todos: updatedTodos, currentTodo: {} }; // также обязательно обнуляем currentTodo
+
     case "REMOVE_TODO":
       const filteredTodos = state.todos.filter((t) => t.id !== action.payload.id);
       return { ...state, todos: filteredTodos };

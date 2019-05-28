@@ -1,16 +1,32 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import uuidv4 from "uuid/v4";
 
 import TodosContext from "../context";
 
 export default function TodoForm() {
   const [text, setText] = useState("");
-  const { dispatch } = useContext(TodosContext);
+  const {
+    state: { currentTodo = {} },
+    dispatch
+  } = useContext(TodosContext);
+
+  useEffect(() => {
+    if (currentTodo.text) {
+      setText(currentTodo.text);
+    } else {
+      setText("");
+    }
+  }, [currentTodo.id, currentTodo.text]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newTodo = { id: uuidv4(), text, complete: false };
-    dispatch({ type: "ADD_TODO", payload: newTodo });
+
+    if (currentTodo.text) {
+      dispatch({ type: "UPDATE_TODO", payload: { ...currentTodo, text } });
+    } else {
+      const newTodo = { id: uuidv4(), text, complete: false };
+      dispatch({ type: "ADD_TODO", payload: newTodo });
+    }
 
     setText("");
   };
