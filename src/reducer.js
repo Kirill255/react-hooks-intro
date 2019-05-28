@@ -1,5 +1,8 @@
 export default function reducer(state, action) {
   switch (action.type) {
+    case "GET_TODOS":
+      return { ...state, todos: action.payload };
+
     case "ADD_TODO":
       const addedTodos = [...state.todos, action.payload];
       return { ...state, todos: addedTodos };
