@@ -4,40 +4,36 @@ import axios from "axios";
 export default function News() {
   const [results, setResults] = useState([]);
   const [query, setQuery] = useState("react hooks");
+  const [url, setUrl] = useState(`https://hn.algolia.com/api/v1/search?query=${query}`);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
   const searchInputRef = useRef();
 
   useEffect(() => {
-    fetchResults();
-    return () => {
-      isMounted.current = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // отключить eslint обязательно в этом примере или он будет ругаться на пропущенную зависимость и придёться пиздец как извращаться
-  // просто вообще дикий костыль, создавать ссылку потом её обновлять при клике или при отправке формы (скорее второе)
-  // пример найти можно сдесь https://www.robinwieruch.de/react-hooks-fetch-data/
+    const fetchResults = async () => {
+      setError(null);
+      setIsLoading(true);
 
-  const fetchResults = async () => {
-    setIsLoading(true);
+      try {
+        const response = await axios(url);
 
-    try {
-      const response = await axios.get(`https://hn.algolia.com/api/v1/search?query=${query}`);
-      if (isMounted.current) {
-        setResults(response.data.hits);
+        if (isMounted.current) {
+          setResults(response.data.hits);
+        }
+      } catch (error) {
+        setError(error);
       }
-    } catch (error) {
-      setError(error);
-    }
-    setIsLoading(false);
-  };
 
-  const handleSearch = (event) => {
-    event.preventDefault();
+      setIsLoading(false);
+
+      return () => {
+        isMounted.current = false;
+      };
+    };
+
     fetchResults();
-  };
+  }, [url]);
 
   const handleClearSearch = () => {
     setQuery("");
@@ -49,7 +45,13 @@ export default function News() {
     <div className="container max-w-md mx-auto p-4 m-2 bg-purple-lightest shadow-lg rounded">
       <img src="https://icon.now.sh/react/c0c" alt="React Logo" className="float-right h-12" />
       <h1 className="text-grey-darkest font-thin">HN news with React Hooks</h1>
-      <form onSubmit={handleSearch} className="mb-2">
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          setUrl(`http://hn.algolia.com/api/v1/search?query=${query}`);
+        }}
+        className="mb-2"
+      >
         <input
           type="text"
           className="border p-1 rounded"
