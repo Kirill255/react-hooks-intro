@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import uuidv4 from "uuid/v4";
+import axios from "axios";
 
 import TodosContext from "../context";
 
@@ -18,15 +19,24 @@ export default function TodoForm() {
     }
   }, [currentTodo.id, currentTodo.text]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!text) return;
 
     if (currentTodo.text) {
-      dispatch({ type: "UPDATE_TODO", payload: { ...currentTodo, text } });
+      const response = await axios.patch(
+        `https://hooks-api-mnikfepzx.now.sh/todos/${currentTodo.id}`,
+        {
+          text
+        }
+      );
+      dispatch({ type: "UPDATE_TODO", payload: response.data });
     } else {
       const newTodo = { id: uuidv4(), text, complete: false };
+      // const response = await axios.post("https://hooks-api-mnikfepzx.now.sh/todos", newTodo);
+      // dispatch({ type: "ADD_TODO", payload: response.data }); // по идее можно передать и `payload: newTodo`
+      await axios.post("https://hooks-api-mnikfepzx.now.sh/todos", newTodo);
       dispatch({ type: "ADD_TODO", payload: newTodo });
     }
 
