@@ -17,6 +17,7 @@ const App = () => {
 
   // const [location, setLocation] = useState(initialLocationState); // location.latitude, location.longitude, location.speed
   const [{ latitude, longitude, speed }, setLocation] = useState(initialLocationState); //или так
+  const [error, setError] = useState(null);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const App = () => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    navigator.geolocation.getCurrentPosition(handleGeolocation);
+    navigator.geolocation.getCurrentPosition(handleGeolocation, handleErrorGeolocation, {});
     const watchId = navigator.geolocation.watchPosition(handleGeolocation);
 
     return () => {
@@ -48,13 +49,20 @@ const App = () => {
   const handleOnline = () => setStatus(true);
   const handleOffline = () => setStatus(false);
 
-  const handleGeolocation = (e) => {
+  const handleGeolocation = (position) => {
     if (isMounted.current) {
       setLocation({
-        latitude: e.coords.latitude,
-        longitude: e.coords.longitude,
-        speed: e.coords.speed
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        speed: position.coords.speed
       });
+    }
+  };
+
+  const handleErrorGeolocation = (error) => {
+    if (isMounted.current) {
+      console.log(error);
+      setError(error);
     }
   };
 
@@ -101,8 +109,8 @@ const App = () => {
       </p>
 
       <h3 className="m-2">Geolocation</h3>
-      <p>Latitude is {latitude ? latitude : "No access"}</p>
-      <p>Longitude is {longitude ? longitude : "No access"}</p>
+      <p>Latitude is {latitude ? latitude : error ? error.message : "No access"}</p>
+      <p>Longitude is {longitude ? longitude : error ? error.message : "No access"}</p>
       <p>Your speed is {speed ? speed : "0"}</p>
 
       <Login />
@@ -116,4 +124,5 @@ export default App;
 
 /*
 лампочка может тупить, так как делаются запросы на now.sh, лучше просто расположить иконки локально (это просто пример)
+Geolocation API  -> https://webplatformcourse.com/preview/9-geolocation-api/
 */
