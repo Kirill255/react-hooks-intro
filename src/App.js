@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 
 import Counter from "./Counter";
+import Toggle from "./Toggle";
 
 import { useTitleInput } from "./hooks/useTitleInput";
 
@@ -33,6 +34,9 @@ const App = () => {
   return (
     <div className="main-wrapper">
       <h1>{TitleReversed}</h1>
+
+      <Toggle />
+
       <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       <h3>{name}</h3>
 
