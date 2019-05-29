@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useTitleInput } from "./hooks/useTitleInput";
 
 const App = () => {
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    document.title = name;
-  });
+  const [name, setName] = useTitleInput("");
 
   return (
     <div className="main-wrapper">
