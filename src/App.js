@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+import useAbortableFetch from "use-abortable-fetch";
 
 import Counter from "./Counter";
 import Toggle from "./Toggle";
@@ -7,17 +8,9 @@ import { useTitleInput } from "./hooks/useTitleInput";
 
 const App = () => {
   const [name, setName] = useTitleInput("");
-  const [dishes, setDishes] = useState([]);
-
-  const fetchDishes = async () => {
-    const res = await fetch("https://my-json-server.typicode.com/leveluptuts/fakeapi/dishes");
-    const data = await res.json();
-    setDishes(data);
-  };
-
-  useEffect(() => {
-    fetchDishes();
-  }, []);
+  const { data, loading, error, abort } = useAbortableFetch(
+    "https://my-json-server.typicode.com/leveluptuts/fakeapi/dishes"
+  );
 
   const reverseWord = (word) => {
     console.log("function run");
@@ -31,6 +24,17 @@ const App = () => {
 
   const TitleReversed = useMemo(() => reverseWord(title), [title]); // если [title] не изменился, то useMemo не будет повторно запускать reverseWord функцию
 
+  // if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div>
+        Loading... <button onClick={abort}>Cancel</button>
+      </div>
+    );
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data) return null;
+  // console.log(data);
+
   return (
     <div className="main-wrapper">
       <h1>{TitleReversed}</h1>
@@ -43,7 +47,7 @@ const App = () => {
       <Counter />
 
       <div>
-        {dishes.map((dish, i) => (
+        {data.map((dish, i) => (
           <article key={i} className="dish-card dish-card--withImage">
             <h3>{dish.name}</h3>
             <p>{dish.desc}</p>
